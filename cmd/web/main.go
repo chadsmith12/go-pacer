@@ -1,21 +1,25 @@
 package main
 
 import (
-	"encoding/json"
 	"log"
 	"net/http"
+
+	"github.com/chadsmith12/pacer/pkgs/pulse"
 )
 
 func main() {
-	mux := http.NewServeMux()
+	pulseApp := pulse.Pulse(":4500")
 
-	mux.Handle("/", http.FileServer(http.Dir("wwwroot")))
-	mux.HandleFunc("GET /api/hello", func(w http.ResponseWriter, r *http.Request) {
-		json.NewEncoder(w).Encode("{\"hello\": \"world\"}")
-	})
+	pulseApp.Get("/hello", hello)
 
-	err := http.ListenAndServe(":6969", mux)
-	if err != http.ErrServerClosed {
+	if err := pulseApp.Start(); err != nil {
 		log.Fatal(err)
 	}
 }
+
+func hello(r *http.Request) pulse.PuleHttpWriter {
+	var result = struct { Ok bool } { Ok: true }
+
+	return pulse.Json(result)
+}
+
