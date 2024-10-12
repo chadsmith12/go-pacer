@@ -2,24 +2,15 @@ package main
 
 import (
 	"log"
-	"net/http"
 
-	"github.com/chadsmith12/pacer/pkgs/pulse"
+	"github.com/chadsmith12/pacer/internal/app"
 )
 
 func main() {
-	pulseApp := pulse.Pulse(":4500")
+	app := app.New()
 
-	pulseApp.Get("/hello", hello)
-
-	if err := pulseApp.Start(); err != nil {
+	if err := app.Start(); err != nil {
 		log.Fatal(err)
 	}
-}
-
-func hello(r *http.Request) pulse.PuleHttpWriter {
-	var result = struct { Ok bool } { Ok: true }
-
-	return pulse.Json(result)
 }
 

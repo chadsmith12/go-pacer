@@ -77,3 +77,7 @@ func (p *PulseApp) Start() error {
 func (p *PulseApp) Get(pattern string, endpoint EndpointHandler) {
     p.router.Get(pattern, endpoint)
 }
+
+func (p *PulseApp) Group(prefix string) *Group {
+    return p.router.Group(prefix)
+}

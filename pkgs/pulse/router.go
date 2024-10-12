@@ -21,6 +21,10 @@ func (router *PulseRouter) Get(pattern string, endpoint EndpointHandler, middlew
     router.apply(GET, pattern, endpoint, middleware...)
 }
 
+func (router *PulseRouter) Group(prefix string) *Group {
+    return NewGroup(prefix, router)
+}
+
 func (router *PulseRouter) ServeHTTP(w http.ResponseWriter, req *http.Request) {
     router.mux.ServeHTTP(w, req)
 }
