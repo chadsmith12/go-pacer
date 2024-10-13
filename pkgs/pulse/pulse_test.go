@@ -10,7 +10,7 @@ import (
 )
 
 func TestPulseStart(t *testing.T) {
-    app := pulse.Pulse(":4500")
+    app := pulse.Pulse()
   
     go func() {
         err := app.Start()

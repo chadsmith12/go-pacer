@@ -21,8 +21,9 @@ const (
     PATCH = http.MethodPatch
 )
 
-type EndpointHandler = func(req *http.Request) PuleHttpWriter
-type MiddlewareFunc = func(EndpointHandler) EndpointHandler
+type EndpointHandler func(req *http.Request) PuleHttpWriter
+type MiddlewareFunc func(EndpointHandler) EndpointHandler
+type Option func(*PulseApp)
 
 type PulseApp struct {
     server *http.Server
@@ -31,20 +32,34 @@ type PulseApp struct {
     addr string
 }
 
-func Pulse(addr string) *PulseApp {
-    pulseApp := &PulseApp{ addr: addr }
+func Pulse(options ...Option) *PulseApp {
+    pulseApp := &PulseApp{ addr: ":4500" }
     logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
     router := NewRouter(pulseApp)
-    server := &http.Server {
-        Addr: addr,
-        Handler: router,
-    }
+    server := &http.Server { Handler: router,}
 
     pulseApp.logger = logger
     pulseApp.server = server
     pulseApp.router = router
 
+    for _, option := range options {
+        option(pulseApp)
+    }
+    pulseApp.server.Addr = pulseApp.addr
+
     return pulseApp
+}
+
+func WithAddr(addr string) Option {
+    return func(pa *PulseApp) {
+        pa.addr = addr
+    }
+}
+
+func WithLogger(logger *slog.Logger) Option {
+    return func(pa *PulseApp) {
+        pa.logger = logger
+    }
 }
 
 func (p *PulseApp) Start() error {

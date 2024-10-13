@@ -15,7 +15,7 @@ type App struct {
 }
 
 func New() *App {
-    pulseApp := pulse.Pulse(":4500")
+    pulseApp := pulse.Pulse()
 
     return &App{pulse: pulseApp}
 }

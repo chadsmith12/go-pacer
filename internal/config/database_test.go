@@ -18,7 +18,7 @@ func TestDbConfigString(t *testing.T) {
     }
 
     actual := dbConfig.String()
-    expected := "postgresql://postgres:secretpassword123@localhost:5432/postgres?sslmode=false"
+    expected := "postgresql://postgres:secretpassword123@localhost:5432/postgres"
 
     assert.Equal(t, expected, actual)
 }

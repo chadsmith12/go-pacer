@@ -11,7 +11,7 @@ import (
 )
 
 func TestBasicRoute(t *testing.T) {
-    app := pulse.Pulse(":4500")
+    app := pulse.Pulse()
     router := pulse.NewRouter(app)
 
     router.Get("/", func(req *http.Request) pulse.PuleHttpWriter {
@@ -26,7 +26,7 @@ func TestBasicRoute(t *testing.T) {
 }
 
 func TestJsonWriting(t *testing.T) {
-    app := pulse.Pulse(":4500")
+    app := pulse.Pulse()
     router := pulse.NewRouter(app)
     var result = struct { Ok bool } { Ok: true }
     encoded, _ := json.Marshal(result)

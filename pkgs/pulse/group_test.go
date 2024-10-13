@@ -10,7 +10,7 @@ import (
 )
 
 func TestGroup(t *testing.T) {
-    app := pulse.Pulse(":4500")
+    app := pulse.Pulse()
     router := pulse.NewRouter(app)
     group := router.Group("/api")
 
