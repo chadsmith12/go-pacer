@@ -7,5 +7,5 @@ import (
 )
 
 func Health(req *http.Request) pulse.PuleHttpWriter {
-    return pulse.Ok()
+    return pulse.OkResult()
 }

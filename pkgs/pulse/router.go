@@ -21,6 +21,10 @@ func (router *PulseRouter) Get(pattern string, endpoint EndpointHandler, middlew
     router.apply(GET, pattern, endpoint, middleware...)
 }
 
+func (router *PulseRouter) Post(pattern string, endpoint EndpointHandler, middleware ...MiddlewareFunc) {
+    router.apply(POST, pattern, endpoint, middleware...)
+}
+
 func (router *PulseRouter) Group(prefix string) *Group {
     return NewGroup(prefix, router)
 }

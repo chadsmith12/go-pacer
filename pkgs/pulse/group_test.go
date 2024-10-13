@@ -15,7 +15,7 @@ func TestGroup(t *testing.T) {
     group := router.Group("/api")
 
     group.Get("/hello", func(req *http.Request) pulse.PuleHttpWriter {
-        return pulse.Ok()
+        return pulse.OkResult()
     })
 
     req := httptest.NewRequest("GET", "/api/hello", nil)

@@ -78,6 +78,10 @@ func (p *PulseApp) Get(pattern string, endpoint EndpointHandler) {
     p.router.Get(pattern, endpoint)
 }
 
+func (p *PulseApp) Post(pattern string, endpoint EndpointHandler) {
+    p.router.Post(pattern, endpoint)
+}
+
 func (p *PulseApp) Group(prefix string) *Group {
     return p.router.Group(prefix)
 }

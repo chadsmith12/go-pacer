@@ -15,7 +15,7 @@ func TestBasicRoute(t *testing.T) {
     router := pulse.NewRouter(app)
 
     router.Get("/", func(req *http.Request) pulse.PuleHttpWriter {
-        return pulse.Ok()        
+        return pulse.OkResult()        
     })
 
     req := httptest.NewRequest("GET", "/", nil)
@@ -32,7 +32,7 @@ func TestJsonWriting(t *testing.T) {
     encoded, _ := json.Marshal(result)
     
     router.Get("/", func(req *http.Request) pulse.PuleHttpWriter {
-        return pulse.Json(result)
+        return pulse.JsonResult(result)
     })
 
     req := httptest.NewRequest("GET", "/", nil)

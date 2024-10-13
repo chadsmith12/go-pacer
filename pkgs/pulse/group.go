@@ -19,6 +19,10 @@ func (group *Group) Get(pattern string, endpoint EndpointHandler) {
     group.router.Get(routeUrl(group.prefix, pattern), endpoint, group.middleware...)
 }
 
+func (group *Group) Post(pattern string, endpoint EndpointHandler) {
+    group.router.Post(routeUrl(group.prefix, pattern), endpoint, group.middleware...)
+}
+
 func (group *Group) Use(middleware ...MiddlewareFunc) {
     group.middleware = append(group.middleware, middleware...)
 }

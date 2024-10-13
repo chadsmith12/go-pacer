@@ -30,13 +30,24 @@ func (jw JsonResultWriter) Write(w http.ResponseWriter, req *http.Request) {
 }
 
 
-func Json(data interface{}) JsonResultWriter {
+func JsonResult(data interface{}) JsonResultWriter {
     return JsonResultWriter{
         HttpStatusCodeWriter: HttpStatusCodeWriter{ StatusCode: 200 },
         Data: data,
     }
 }
 
-func Ok() HttpStatusCodeWriter {
+func ErrorJson(statusCode int, data interface{}) JsonResultWriter {
+    return JsonResultWriter{
+        HttpStatusCodeWriter: HttpStatusCodeWriter{ StatusCode: statusCode },
+        Data: data,
+    }
+}
+
+func InternalErrorJson(data interface{}) JsonResultWriter {
+    return ErrorJson(500, data)
+}
+
+func OkResult() HttpStatusCodeWriter {
     return HttpStatusCodeWriter{ StatusCode: 200 }
 }
