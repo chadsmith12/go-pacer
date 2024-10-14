@@ -1,13 +1,8 @@
 package app
 
 import (
-	"context"
-	"net/http"
-
+	authorsV1 "github.com/chadsmith12/pacer/internal/authors/v1"
 	"github.com/chadsmith12/pacer/internal/health"
-	"github.com/chadsmith12/pacer/internal/results"
-	"github.com/chadsmith12/pacer/pkgs/db"
-	"github.com/chadsmith12/pacer/pkgs/pulse"
 )
 
 func (a *App) loadEndpoints() {
@@ -15,31 +10,6 @@ func (a *App) loadEndpoints() {
 
     group.Get("/health", health.Health)
 
-    group.Get("/authors", func(req *http.Request) pulse.PuleHttpWriter {
-	repo := db.New(a.db)
-   
-	authors, err := repo.ListAuthors(context.Background())
-	if err != nil {
-	    return pulse.InternalErrorJson(err)
-	}
-
-	return results.List(authors)
-    })
-
-    group.Post("/authors", func(req *http.Request) pulse.PuleHttpWriter {
-	var author db.CreateAuthorParams
-	err := pulse.Json(req.Body, &author)
-
-	if err != nil {
-	    return pulse.InternalErrorJson(err)
-	}
-
-	repo := db.New(a.db)
-	created, err := repo.CreateAuthor(context.Background(), author)
-	if err != nil {
-	    return pulse.InternalErrorJson(err)
-	}
-
-	return pulse.JsonResult(created)
-    })
+    authorsHandlers := authorsV1.NewHandlers(a.db, a.pulse.Logger())
+    authorsHandlers.AuthorRoutes(group)
 }

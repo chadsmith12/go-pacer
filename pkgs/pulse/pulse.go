@@ -88,13 +88,14 @@ func (p *PulseApp) Start() error {
         close(done)
     }()
 
-    p.logger.Info("server listening on ", slog.String("addr", p.addr))
+    p.logger.LogAttrs(context.TODO(), slog.LevelInfo, "server started", slog.String("addr", p.addr))
 
     select {
     case <-done:
         break;
     case <-ctx.Done():
         ctx, cancel := context.WithTimeout(context.Background(), p.shutdownTimeout)
+        p.logger.LogAttrs(ctx, slog.LevelInfo, "Shutting down server...")
         p.server.Shutdown(ctx)
         cancel()
     }
@@ -112,4 +113,8 @@ func (p *PulseApp) Post(pattern string, endpoint EndpointHandler) {
 
 func (p *PulseApp) Group(prefix string) *Group {
     return p.router.Group(prefix)
+}
+
+func (p *PulseApp) Logger() *slog.Logger {
+    return p.logger
 }
