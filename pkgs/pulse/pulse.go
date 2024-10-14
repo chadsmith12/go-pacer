@@ -21,6 +21,8 @@ const (
     PATCH = http.MethodPatch
 )
 
+const DEFAULT_ADDR string = ":4500"
+
 type EndpointHandler func(req *http.Request) PuleHttpWriter
 type MiddlewareFunc func(EndpointHandler) EndpointHandler
 type Option func(*PulseApp)
@@ -30,10 +32,15 @@ type PulseApp struct {
     router *PulseRouter
     logger *slog.Logger
     addr string
+    shutdownTimeout time.Duration
 }
 
 func Pulse(options ...Option) *PulseApp {
-    pulseApp := &PulseApp{ addr: ":4500" }
+    pulseApp := &PulseApp{ 
+        addr: DEFAULT_ADDR,
+        shutdownTimeout: time.Second * 30,
+    }
+
     logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
     router := NewRouter(pulseApp)
     server := &http.Server { Handler: router,}
@@ -62,6 +69,12 @@ func WithLogger(logger *slog.Logger) Option {
     }
 }
 
+func WithShutdownTimeout(duration time.Duration) Option {
+    return func(pa *PulseApp) {
+        pa.shutdownTimeout = duration
+    }
+}
+
 func (p *PulseApp) Start() error {
     ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
     defer cancel()
@@ -81,7 +94,7 @@ func (p *PulseApp) Start() error {
     case <-done:
         break;
     case <-ctx.Done():
-        ctx, cancel := context.WithTimeout(context.Background(), time.Second*30)
+        ctx, cancel := context.WithTimeout(context.Background(), p.shutdownTimeout)
         p.server.Shutdown(ctx)
         cancel()
     }
