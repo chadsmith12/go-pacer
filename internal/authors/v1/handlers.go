@@ -26,29 +26,29 @@ func (h *handlers) AuthorRoutes(group *pulse.Group) {
 }
 
 func (h *handlers) ListAuthors(req *http.Request) pulse.PuleHttpWriter {
-	authors, err := h.repo.ListAuthors(context.Background())
-	if err != nil {
-	    return pulse.InternalErrorJson(err)
-	}
-    
-    h.logger.LogAttrs(context.TODO(), slog.LevelInfo, "listed authors")
+    authors, err := h.repo.ListAuthors(context.Background())
+    if err != nil {
+	return pulse.InternalErrorJson(err)
+    }
 
-	return results.List(authors)
+    h.logger.LogAttrs(context.TODO(), slog.LevelInfo, "listing authors")
+
+    return results.List(authors)
 }
 
 func (h *handlers) CreateAuthor(req *http.Request) pulse.PuleHttpWriter {
-	var author db.CreateAuthorParams
-	err := pulse.Json(req.Body, &author)
+    var author db.CreateAuthorParams
+    err := pulse.Json(req.Body, &author)
 
-	if err != nil {
-	    return pulse.InternalErrorJson(err)
-	}
+    if err != nil {
+	return pulse.InternalErrorJson(err)
+    }
 
-	created, err := h.repo.CreateAuthor(context.Background(), author)
-	if err != nil {
-	    return pulse.InternalErrorJson(err)
-	}
+    created, err := h.repo.CreateAuthor(context.Background(), author)
+    if err != nil {
+	return pulse.InternalErrorJson(err)
+    }
 
-	return pulse.JsonResult(created)
+    return pulse.JsonResult(created)
 }
 
