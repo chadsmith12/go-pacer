@@ -12,6 +12,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to startup server - %v", err)
 	}
+
 	app := app.New()
 
 	if err := app.Start(); err != nil {

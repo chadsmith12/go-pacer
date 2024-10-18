@@ -103,6 +103,10 @@ func (p *PulseApp) Start() error {
     return nil
 }
 
+func (p *PulseApp) UseStaticFiles() {
+    p.router.mux.Handle("/", http.FileServer(http.Dir("wwwroot")))
+}
+
 func (p *PulseApp) Get(pattern string, endpoint EndpointHandler) {
     p.router.Get(pattern, endpoint)
 }
