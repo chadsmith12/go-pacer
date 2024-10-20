@@ -3,7 +3,7 @@ package db
 import (
 	"context"
 
-	"github.com/chadsmith12/pacer/internal/config"
+	"github.com/chadsmith12/pacer/app/config"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 

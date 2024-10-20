@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/chadsmith12/pacer/internal/app"
+	"github.com/chadsmith12/pacer/app"
 	"github.com/joho/godotenv"
 )
 
