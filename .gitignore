@@ -1,2 +1,4 @@
 .env
-temp/app
+tmp/
+app/assets/node_modules/
+
